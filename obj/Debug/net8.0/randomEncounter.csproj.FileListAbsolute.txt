@@ -1,0 +1,14 @@
+/Users/asta/Documents/prog/randomEncounter/bin/Debug/net8.0/randomEncounter
+/Users/asta/Documents/prog/randomEncounter/bin/Debug/net8.0/randomEncounter.deps.json
+/Users/asta/Documents/prog/randomEncounter/bin/Debug/net8.0/randomEncounter.runtimeconfig.json
+/Users/asta/Documents/prog/randomEncounter/bin/Debug/net8.0/randomEncounter.dll
+/Users/asta/Documents/prog/randomEncounter/bin/Debug/net8.0/randomEncounter.pdb
+/Users/asta/Documents/prog/randomEncounter/obj/Debug/net8.0/randomEncounter.GeneratedMSBuildEditorConfig.editorconfig
+/Users/asta/Documents/prog/randomEncounter/obj/Debug/net8.0/randomEncounter.AssemblyInfoInputs.cache
+/Users/asta/Documents/prog/randomEncounter/obj/Debug/net8.0/randomEncounter.AssemblyInfo.cs
+/Users/asta/Documents/prog/randomEncounter/obj/Debug/net8.0/randomEncounter.csproj.CoreCompileInputs.cache
+/Users/asta/Documents/prog/randomEncounter/obj/Debug/net8.0/randomEncounter.dll
+/Users/asta/Documents/prog/randomEncounter/obj/Debug/net8.0/refint/randomEncounter.dll
+/Users/asta/Documents/prog/randomEncounter/obj/Debug/net8.0/randomEncounter.pdb
+/Users/asta/Documents/prog/randomEncounter/obj/Debug/net8.0/randomEncounter.genruntimeconfig.cache
+/Users/asta/Documents/prog/randomEncounter/obj/Debug/net8.0/ref/randomEncounter.dll
