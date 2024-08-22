@@ -8,19 +8,15 @@
         run attack turns
 */
 
-const int MAX_ENEMIES = 4;
+// MAIN VAR SET
+const int MaxEnemies = 4;
+const int MaxDice = 20;
+const int MinDice = 1;
 
 // NEW PLAYER
-Actor player;
+Actor player = CreatePlayer();
 // setting custom playername
-if (args.Length > 0)
-{
-    player = new Player(args[0]);
-}
-else
-{
-    player = new Player();
-}
+
 
 // NEW ENEMIES AND SPEED SORTING
 Actor[] enemy_list = CreateEnemies();
@@ -35,14 +31,28 @@ foreach (Actor enemy in enemy_list)
 int Roll()
 {
     var rand = new Random();
-    return rand.Next(1, 20);
+    return rand.Next(MinDice, MaxDice);
+}
+
+Actor CreatePlayer()
+{
+    Actor player;
+    if (args.Length > 0)
+    {
+        player = new Player(args[0]);
+    }
+    else
+    {
+        player = new Player();
+    }
+    return player;
 }
 
 Actor[] CreateEnemies()
 {
-    Actor[] e_list = new Actor[MAX_ENEMIES];
+    Actor[] e_list = new Actor[MaxEnemies];
 
-    for (int i = 0; i < MAX_ENEMIES; i++)
+    for (int i = 0; i < MaxEnemies; i++)
     {
         int roll = Roll();
         // Console.WriteLine(roll);
@@ -132,8 +142,8 @@ public class Player : Actor
 public class Ogre : Actor
 {
     public Ogre() : base(name: "Ogre", hp: 100, def: 30, melee: 30, ranged: 0, speed: 20) { }
-    public Ogre(string customName) : base(name: customName, hp: 100, def: 30, melee: 30, ranged: 0, speed: 20) { }
-    public Ogre(string customName, int customHp) : base(name: customName, hp: customHp, def: 30, melee: 30, ranged: 0, speed: 20) { }
+    // public Ogre(string customName) : base(name: customName, hp: 100, def: 30, melee: 30, ranged: 0, speed: 20) { }
+    public Ogre(string customName, int customHp) : base(name: customName, hp: customHp, def: 30, melee: 30, ranged: 0, speed: 30) { }
 }
 
 public class Slime : Actor
