@@ -1,20 +1,4 @@
-﻿
-Actor[] enemies = CreateEnemies();
-Actor player = new Player();
-// Actor shrek = new Ogre("shrek");
-// Actor ogre = new Ogre();
-
-// int dmgRoll = Roll();
-// shrek.Damaged(player.MeleeAtk, dmgRoll);
-// dmgRoll = Roll();
-// ogre.Damaged(shrek.MeleeAtk, dmgRoll);
-
-foreach (Actor enemy in enemies)
-{
-    Console.WriteLine(enemy.Name);
-}
-
-/*
+﻿/*
     TODO
     sort list by speed, including player in list
     run turn loop until winConditon or player HP <1
@@ -24,6 +8,30 @@ foreach (Actor enemy in enemies)
         run attack turns
 */
 
+const int MAX_ENEMIES = 4;
+
+// NEW PLAYER
+Actor player;
+// setting custom playername
+if (args.Length > 0)
+{
+    player = new Player(args[0]);
+}
+else
+{
+    player = new Player();
+}
+
+// NEW ENEMIES AND SPEED SORTING
+Actor[] enemy_list = CreateEnemies();
+enemy_list = SpeedSort(enemy_list);
+
+foreach (Actor enemy in enemy_list)
+{
+    Console.WriteLine(enemy.Name);
+}
+
+
 int Roll()
 {
     var rand = new Random();
@@ -32,9 +40,9 @@ int Roll()
 
 Actor[] CreateEnemies()
 {
-    Actor[] e_list = new Actor[4];
+    Actor[] e_list = new Actor[MAX_ENEMIES];
 
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < MAX_ENEMIES; i++)
     {
         int roll = Roll();
         // Console.WriteLine(roll);
@@ -44,7 +52,7 @@ Actor[] CreateEnemies()
                 e_list[i] = new CyberDemon();
                 break;
             case > 15:
-                e_list[i] = new Ogre("Shrek");
+                e_list[i] = new Ogre("Shrek", 200);
                 break;
             case > 10:
                 e_list[i] = new Ogre();
@@ -59,6 +67,11 @@ Actor[] CreateEnemies()
     }
 
     return e_list;
+}
+
+Actor[] SpeedSort(Actor[] unsortedList)
+{
+    return unsortedList.OrderBy(enemy => enemy.Speed).Reverse().ToArray();
 }
 
 
@@ -110,12 +123,17 @@ public class Player : Actor
 {
     public Player() : base(name: "Player", hp: 150, def: 120, melee: 50, ranged: 50, speed: 30) { }
     public Player(string customName) : base(name: customName, hp: 150, def: 120, melee: 50, ranged: 50, speed: 30) { }
+
+
+    // add debug/cheat mode
+    // public Player(string customName) : base(name: customName, hp: 999, def: 120, melee: 50, ranged: 50, speed: 30) { }
 }
 
 public class Ogre : Actor
 {
     public Ogre() : base(name: "Ogre", hp: 100, def: 30, melee: 30, ranged: 0, speed: 20) { }
     public Ogre(string customName) : base(name: customName, hp: 100, def: 30, melee: 30, ranged: 0, speed: 20) { }
+    public Ogre(string customName, int customHp) : base(name: customName, hp: customHp, def: 30, melee: 30, ranged: 0, speed: 20) { }
 }
 
 public class Slime : Actor
@@ -128,46 +146,3 @@ public class CyberDemon : Actor
     public CyberDemon() : base(name: "CyberDemon", hp: 500, def: 200, melee: 120, ranged: 200, speed: 20) { }
 }
 
-// base(name: , hp: , def: , melee: , ranged: , speed: )
-
-
-// USE BASE CLASSES
-// public class ActorFactory()
-// {
-//     public Actor newSlime()
-//     {
-//         return new Actor("Slime", 30, 10, 10, 10, 10);
-//     }
-
-//     public Actor newPlayer()
-//     {
-//         return new Actor("Player", 30, 10, 10, 10, 10);
-//     }
-
-//     public Actor newOgre()
-//     {
-//         return new Actor("Ogre", 100, 30, 30, 0, 20);
-//         // public string name = "Ogre";
-//         // public int hp = 100;
-//         // public int melee = 30;
-//         // public int range = 20;
-//     }
-
-//     public Actor CyberDemon()
-//     {
-//         return new Actor("CyberDemon", 5500, 120, 30, 0, 20);
-//         // string name = "CyberDemon";
-//         // int hp = 5500;
-//         // int melee = 120;
-//         // int range = 300;
-//     }
-
-//     // public Actor Player()
-//     // {
-//     //     public string name = "Player";
-//     //     public int hp = 150;
-//     //     public int mp = 120;
-//     //     public int melee = 10;
-
-//     // }
-// }
