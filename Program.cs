@@ -15,6 +15,7 @@ const int MaxActors = MaxEnemies + 1;
 const int MaxDice = 20;
 const int MinDice = 1;
 const int MinTerm = 0;
+bool winConditon = false;
 
 // ACTION SETTINGS
 string[] actions = { "[ ]Melee".PadRight(10), "[ ]Ranged".PadRight(10), "[ ]Escape".PadRight(10) };
@@ -29,26 +30,14 @@ int termHalfHeight = Console.WindowHeight / 2;
 int termHalfWidth = Console.WindowWidth / 2;
 
 
-bool winConditon = false;
-
 // CREATING ACTORS AND SORTING SPEED
 Actor player = CreatePlayer();
 Actor[] enemies = CreateEnemies();
 Actor[] turnOrder = TurnSort(enemies, player);
-// foreach (Actor enemy in turnOrder)
-// {
-//     Console.WriteLine(enemy.Name);
-// }
 
 
 // TURN LOOP
-Console.Clear();
-// DRAW GRAPHICS HERE
-Console.SetCursorPosition(termHalfWidth - promptHalfLength, termHeight);
-Console.BackgroundColor = ConsoleColor.DarkBlue;
-// Console.ForegroundColor = ConsoleColor.White;
-Console.Write(TurnPrompt);
-
+InitGameScreen();
 do
 {
     // DRAW 
@@ -60,6 +49,15 @@ int Roll()
 {
     var rand = new Random();
     return rand.Next(MinDice, MaxDice);
+}
+
+void InitGameScreen()
+{
+    Console.Clear();
+    Console.SetCursorPosition(termHalfWidth - promptHalfLength, termHeight);
+    Console.BackgroundColor = ConsoleColor.DarkBlue;
+    Console.ForegroundColor = ConsoleColor.White;
+    Console.Write(TurnPrompt);
 }
 
 Actor CreatePlayer()
