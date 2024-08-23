@@ -8,11 +8,27 @@
         run attack turns
 */
 
-// MAIN VAR SET
+// MAIN VARIABLE SETTING
+// GAME SETINGS
 const int MaxEnemies = 4;
 const int MaxActors = MaxEnemies + 1;
 const int MaxDice = 20;
 const int MinDice = 1;
+const int MinTerm = 0;
+
+// ACTION SETTINGS
+string[] actions = { "[ ]Melee".PadRight(10), "[ ]Ranged".PadRight(10), "[ ]Escape".PadRight(10) };
+string TurnPrompt = string.Join("", actions);
+int promptHalfLength = TurnPrompt.Length / 2;
+
+// TERM SETTINGS
+Console.CursorVisible = false;
+int termHeight = Console.WindowHeight - 1;
+int termWidth = Console.WindowWidth - 1;
+int termHalfHeight = Console.WindowHeight / 2;
+int termHalfWidth = Console.WindowWidth / 2;
+
+
 bool winConditon = false;
 
 // CREATING ACTORS AND SORTING SPEED
@@ -26,11 +42,17 @@ Actor[] turnOrder = TurnSort(enemies, player);
 
 
 // TURN LOOP
-// Console.Clear();
-// do
-// {
-//     Console.WriteLine(player.Name);
-// } while (!winConditon);
+Console.Clear();
+// DRAW GRAPHICS HERE
+Console.SetCursorPosition(termHalfWidth - promptHalfLength, termHeight);
+Console.BackgroundColor = ConsoleColor.DarkBlue;
+// Console.ForegroundColor = ConsoleColor.White;
+Console.Write(TurnPrompt);
+
+do
+{
+    // DRAW 
+} while (!winConditon);
 
 // METHOD/FUNCTION DEFS
 // Basically a D20
