@@ -10,24 +10,30 @@
 
 // MAIN VAR SET
 const int MaxEnemies = 4;
+const int MaxActors = MaxEnemies + 1;
 const int MaxDice = 20;
 const int MinDice = 1;
+bool winConditon = false;
 
-// NEW PLAYER
+// CREATING ACTORS AND SORTING SPEED
 Actor player = CreatePlayer();
-// setting custom playername
+Actor[] enemies = CreateEnemies();
+Actor[] turnOrder = TurnSort(enemies, player);
+// foreach (Actor enemy in turnOrder)
+// {
+//     Console.WriteLine(enemy.Name);
+// }
 
 
-// NEW ENEMIES AND SPEED SORTING
-Actor[] enemy_list = CreateEnemies();
-enemy_list = SpeedSort(enemy_list);
+// TURN LOOP
+// Console.Clear();
+// do
+// {
+//     Console.WriteLine(player.Name);
+// } while (!winConditon);
 
-foreach (Actor enemy in enemy_list)
-{
-    Console.WriteLine(enemy.Name);
-}
-
-
+// METHOD/FUNCTION DEFS
+// Basically a D20
 int Roll()
 {
     var rand = new Random();
@@ -36,56 +42,56 @@ int Roll()
 
 Actor CreatePlayer()
 {
-    Actor player;
     if (args.Length > 0)
     {
-        player = new Player(args[0]);
+        return new Player(customName: args[0]);
     }
     else
     {
-        player = new Player();
+        return new Player();
     }
-    return player;
 }
 
 Actor[] CreateEnemies()
 {
-    Actor[] e_list = new Actor[MaxEnemies];
+    Actor[] enemies = new Actor[MaxEnemies];
 
     for (int i = 0; i < MaxEnemies; i++)
     {
         int roll = Roll();
-        // Console.WriteLine(roll);
         switch (roll)
         {
             case 20:
-                e_list[i] = new CyberDemon();
+                enemies[i] = new CyberDemon();
                 break;
             case > 15:
-                e_list[i] = new Ogre("Shrek", 200);
+                enemies[i] = new Ogre(customName: "Shrek", customHp: 200);
                 break;
             case > 10:
-                e_list[i] = new Ogre();
+                enemies[i] = new Ogre();
                 break;
             case > 0:
-                e_list[i] = new Slime();
+                enemies[i] = new Slime();
                 break;
             default:
-                e_list[i] = new Slime();
+                enemies[i] = new Slime();
                 break;
         }
     }
 
-    return e_list;
+    return enemies;
 }
 
-Actor[] SpeedSort(Actor[] unsortedList)
+Actor[] TurnSort(Actor[] enemies, Actor player)
 {
-    return unsortedList.OrderBy(enemy => enemy.Speed).Reverse().ToArray();
+    Actor[] turnOrder = new Actor[MaxActors];
+    enemies.CopyTo(turnOrder, 0);
+    turnOrder[MaxActors - 1] = player; // player last to preference over same speed enemies
+    return turnOrder.OrderBy(enemy => enemy.Speed).Reverse().ToArray();
 }
 
 
-
+// CLASS DEFS
 public class Actor
 {
     public string Name;
@@ -108,12 +114,12 @@ public class Actor
 
     public void Damaged(int baseDmg, int roll)
     {
-        Console.WriteLine("Name: " + Name);
-        Console.WriteLine("HP: " + Health);
-        Console.WriteLine("Roll: " + roll);
+        // Console.WriteLine("Name: " + Name);
+        // Console.WriteLine("HP: " + Health);
+        // Console.WriteLine("Roll: " + roll);
         int damage = baseDmg + (Def - roll);
-        Console.WriteLine("BD: " + baseDmg);
-        Console.WriteLine("Damage: " + damage);
+        // Console.WriteLine("BD: " + baseDmg);
+        // Console.WriteLine("Damage: " + damage);
         int crit = 2 * (Health / 3);
 
         if (damage >= crit)
@@ -134,7 +140,6 @@ public class Player : Actor
     public Player() : base(name: "Player", hp: 150, def: 120, melee: 50, ranged: 50, speed: 30) { }
     public Player(string customName) : base(name: customName, hp: 150, def: 120, melee: 50, ranged: 50, speed: 30) { }
 
-
     // add debug/cheat mode
     // public Player(string customName) : base(name: customName, hp: 999, def: 120, melee: 50, ranged: 50, speed: 30) { }
 }
@@ -143,7 +148,7 @@ public class Ogre : Actor
 {
     public Ogre() : base(name: "Ogre", hp: 100, def: 30, melee: 30, ranged: 0, speed: 20) { }
     // public Ogre(string customName) : base(name: customName, hp: 100, def: 30, melee: 30, ranged: 0, speed: 20) { }
-    public Ogre(string customName, int customHp) : base(name: customName, hp: customHp, def: 30, melee: 30, ranged: 0, speed: 30) { }
+    public Ogre(string customName, int customHp) : base(name: customName, hp: customHp, def: 30, melee: 30, ranged: 0, speed: 35) { }
 }
 
 public class Slime : Actor
