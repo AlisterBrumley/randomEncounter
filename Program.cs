@@ -8,42 +8,55 @@
         run attack turns
 */
 
-// MAIN VARIABLE SETTING
+/*
+        MAIN VARIABLE SETTING
+*/
 // GAME SETINGS
 const int MaxEnemies = 4;
 const int MaxActors = MaxEnemies + 1;
 const int MaxDice = 20;
 const int MinDice = 1;
-const int MinTerm = 0;
+const int termMin = 0;
 bool winConditon = false;
 
-// ACTION SETTINGS
+// TEXT/INFO SETTINGS
+string gameStart = "A Random Encounter!";
+int gameStartHalfLen = gameStart.Length / 2;
 string[] actions = { "[ ]Melee".PadRight(10), "[ ]Ranged".PadRight(10), "[ ]Escape".PadRight(10) };
-string TurnPrompt = string.Join("", actions);
-int promptHalfLength = TurnPrompt.Length / 2;
+string turnPrompt = string.Join("", actions);
+int promptHalfLength = turnPrompt.Length / 2;
 
 // TERM SETTINGS
 Console.CursorVisible = false;
+ConsoleColor orgBG = Console.BackgroundColor;
+ConsoleColor orgFG = Console.ForegroundColor;
 int termHeight = Console.WindowHeight - 1;
-int termWidth = Console.WindowWidth - 1;
+int termWidth = Console.WindowWidth;
 int termHalfHeight = Console.WindowHeight / 2;
 int termHalfWidth = Console.WindowWidth / 2;
+string fullWidth = "".PadRight(termWidth);
 
 
+/*
+    MAIN    MAIN    MAIN    MAIN    MAIN    MAIN    MAIN    MAIN    MAIN    MAIN    MAIN    MAIN    MAIN    MAIN    MAIN
+*/
 // CREATING ACTORS AND SORTING SPEED
 Actor player = CreatePlayer();
 Actor[] enemies = CreateEnemies();
 Actor[] turnOrder = TurnSort(enemies, player);
 
+InitGameScreen();
 
 // TURN LOOP
-InitGameScreen();
 do
 {
-    // DRAW 
+    
 } while (!winConditon);
 
-// METHOD/FUNCTION DEFS
+
+/*
+        METHOD/FUNCTION DEFS
+*/
 // Basically a D20
 int Roll()
 {
@@ -54,10 +67,19 @@ int Roll()
 void InitGameScreen()
 {
     Console.Clear();
-    Console.SetCursorPosition(termHalfWidth - promptHalfLength, termHeight);
     Console.BackgroundColor = ConsoleColor.DarkBlue;
     Console.ForegroundColor = ConsoleColor.White;
-    Console.Write(TurnPrompt);
+    // Drawing bottom box
+    Console.SetCursorPosition(termMin, termHeight - 2);
+    Console.Write(fullWidth + "\n" + fullWidth + "\n" + fullWidth);
+
+    Console.SetCursorPosition(termHalfWidth - gameStartHalfLen, termHeight - 1);
+    Console.Write(gameStart);
+    Thread.Sleep(1000);
+    Console.SetCursorPosition(termHalfWidth - promptHalfLength, termHeight - 1);
+    Console.Write(turnPrompt);
+    Console.BackgroundColor = orgBG;
+    Console.ForegroundColor = orgFG;
 }
 
 Actor CreatePlayer()
@@ -111,7 +133,9 @@ Actor[] TurnSort(Actor[] enemies, Actor player)
 }
 
 
-// CLASS DEFS
+/*
+        CLASS DEFS
+*/
 public class Actor
 {
     public string Name;
