@@ -50,7 +50,7 @@ InitGameScreen();
 // TURN LOOP
 do
 {
-    
+    PlayerChoice();
 } while (!winConditon);
 
 
@@ -62,6 +62,42 @@ int Roll()
 {
     var rand = new Random();
     return rand.Next(MinDice, MaxDice);
+}
+
+void PlayerChoice()
+{
+    Console.BackgroundColor = ConsoleColor.DarkBlue;
+    Console.ForegroundColor = ConsoleColor.White;
+    Console.SetCursorPosition(termHalfWidth - promptHalfLength + 1, termHeight - 1);
+    Console.Write("ø");
+
+    bool selected = false;
+    do
+    {   
+        // maybe better to create list of pos and inc/dec?
+        // would be easy to check selection later
+        (int x, int y) selectorPos = Console.GetCursorPosition();
+        switch (Console.ReadKey(true).Key)
+        {
+            case ConsoleKey.LeftArrow:
+                Console.SetCursorPosition(selectorPos.x - 1, selectorPos.y);
+                Console.Write(" ");
+                Console.SetCursorPosition(selectorPos.x - 11, selectorPos.y);
+                Console.Write("ø");
+                break;
+            case ConsoleKey.RightArrow:
+                Console.SetCursorPosition(selectorPos.x - 1, selectorPos.y);
+                Console.Write(" ");
+                Console.SetCursorPosition(selectorPos.x + 9, selectorPos.y);
+                Console.Write("ø");
+                break;
+            case ConsoleKey.Escape:
+                Console.Clear();
+                Environment.Exit(0);
+                break;
+        }
+    } while (!selected); 
+    // TODO - REVERT COLOR TO STANDARDS?
 }
 
 void InitGameScreen()
