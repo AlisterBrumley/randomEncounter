@@ -3,7 +3,7 @@
     sort list by speed, including player in list
     run turn loop until winConditon or player HP <1
         action select
-            actions on bottom line of screen
+            turnPrompt on bottom line of screen
             messages one layer above
         run attack turns
 */
@@ -16,25 +16,32 @@ const int MaxEnemies = 4;
 const int MaxActors = MaxEnemies + 1;
 const int MaxDice = 20;
 const int MinDice = 1;
-const int termMin = 0;
+const int TermMin = 0;
 bool winConditon = false;
-
-// TEXT/INFO SETTINGS
-string gameStart = "A Random Encounter!";
-int gameStartHalfLen = gameStart.Length / 2;
-string[] actions = { "[ ]Melee".PadRight(10), "[ ]Ranged".PadRight(10), "[ ]Escape".PadRight(10) };
-string turnPrompt = string.Join("", actions);
-int promptHalfLength = turnPrompt.Length / 2;
 
 // TERM SETTINGS
 Console.CursorVisible = false;
-ConsoleColor orgBG = Console.BackgroundColor;
-ConsoleColor orgFG = Console.ForegroundColor;
 int termHeight = Console.WindowHeight - 1;
 int termWidth = Console.WindowWidth;
 int termHalfHeight = Console.WindowHeight / 2;
 int termHalfWidth = Console.WindowWidth / 2;
+int boxY = termHeight - 2;
+(int x, int y) debugPos = (TermMin, TermMin);
 string fullWidth = "".PadRight(termWidth);
+Box box = new Box();
+
+// PROMPT/INFO SETTINGS
+string gameStart = "A Random Encounter!";
+int gameStartHalfLen = gameStart.Length / 2;
+int messageY = termHeight - 1;
+int promptSpacing = 10;
+string[] turnPrompt = { "Melee".PadRight(promptSpacing), "Ranged".PadRight(promptSpacing), "Escape".PadRight(promptSpacing) };
+int promptArrLength = turnPrompt.Length - 1;
+int promptHalfLength = string.Join("", turnPrompt).Length / 2;
+int promptStartX = termHalfWidth - promptHalfLength;
+(int x, int y)[] promptPos = { (promptStartX, messageY), (promptStartX + promptSpacing, messageY), (promptStartX + promptSpacing * 2, messageY) };
+
+
 
 
 /*
@@ -50,6 +57,7 @@ InitGameScreen();
 // TURN LOOP
 do
 {
+    PromptSet();
     PlayerChoice();
 } while (!winConditon);
 
@@ -66,57 +74,89 @@ int Roll()
 
 void PlayerChoice()
 {
-    Console.BackgroundColor = ConsoleColor.DarkBlue;
-    Console.ForegroundColor = ConsoleColor.White;
-    Console.SetCursorPosition(termHalfWidth - promptHalfLength + 1, termHeight - 1);
-    Console.Write("ø");
-
     bool selected = false;
+    int promptIdx = 0;
+    PromptHighlight(ref promptIdx);
     do
-    {   
-        // maybe better to create list of pos and inc/dec?
-        // would be easy to check selection later
-        (int x, int y) selectorPos = Console.GetCursorPosition();
+    {
         switch (Console.ReadKey(true).Key)
         {
             case ConsoleKey.LeftArrow:
-                Console.SetCursorPosition(selectorPos.x - 1, selectorPos.y);
-                Console.Write(" ");
-                Console.SetCursorPosition(selectorPos.x - 11, selectorPos.y);
-                Console.Write("ø");
+                PromptUnHighlight(promptIdx);
+                promptIdx--;
+                PromptHighlight(ref promptIdx);
                 break;
             case ConsoleKey.RightArrow:
-                Console.SetCursorPosition(selectorPos.x - 1, selectorPos.y);
-                Console.Write(" ");
-                Console.SetCursorPosition(selectorPos.x + 9, selectorPos.y);
-                Console.Write("ø");
+                PromptUnHighlight(promptIdx);
+                promptIdx++;
+                PromptHighlight(ref promptIdx);
                 break;
             case ConsoleKey.Escape:
                 Console.Clear();
+                Console.CursorVisible = true;
                 Environment.Exit(0);
                 break;
+            case ConsoleKey.Enter:
+                selected = true;
+                break;
         }
-    } while (!selected); 
+    } while (!selected);
     // TODO - REVERT COLOR TO STANDARDS?
+    Console.SetCursorPosition(debugPos.x, debugPos.y);
+    Console.Write(turnPrompt[promptIdx]);
 }
 
 void InitGameScreen()
 {
     Console.Clear();
-    Console.BackgroundColor = ConsoleColor.DarkBlue;
-    Console.ForegroundColor = ConsoleColor.White;
     // Drawing bottom box
-    Console.SetCursorPosition(termMin, termHeight - 2);
+    Console.SetCursorPosition(TermMin, boxY);
+    box.ColorSet();
     Console.Write(fullWidth + "\n" + fullWidth + "\n" + fullWidth);
 
-    Console.SetCursorPosition(termHalfWidth - gameStartHalfLen, termHeight - 1);
+    // A random encounter!
+    Console.SetCursorPosition(termHalfWidth - gameStartHalfLen, messageY);
     Console.Write(gameStart);
     Thread.Sleep(1000);
-    Console.SetCursorPosition(termHalfWidth - promptHalfLength, termHeight - 1);
-    Console.Write(turnPrompt);
-    Console.BackgroundColor = orgBG;
-    Console.ForegroundColor = orgFG;
+
+    box.ColorUnset();
 }
+
+void PromptSet()
+{
+    Console.SetCursorPosition(promptPos[0].x, promptPos[0].y);
+    box.ColorSet();
+    foreach (string prompts in turnPrompt)
+    {
+        Console.Write(prompts);
+    }
+    box.ColorUnset();
+}
+
+void PromptHighlight(ref int idx)
+{
+    if (idx > promptArrLength)
+    {
+        idx = 0;
+    }
+    else if (idx < 0)
+    {
+        idx = promptArrLength;
+    }
+    Console.SetCursorPosition(promptPos[idx].x, messageY);
+    box.ColorHighlight();
+    Console.Write(turnPrompt[idx]);
+    box.ColorUnset();
+}
+
+void PromptUnHighlight(int idx)
+{
+    Console.SetCursorPosition(promptPos[idx].x, messageY);
+    box.ColorSet();
+    Console.Write(turnPrompt[idx]);
+    box.ColorUnset();
+}
+
 
 Actor CreatePlayer()
 {
@@ -172,6 +212,31 @@ Actor[] TurnSort(Actor[] enemies, Actor player)
 /*
         CLASS DEFS
 */
+
+public class Box
+{
+
+    ConsoleColor orgBG = Console.BackgroundColor;
+    ConsoleColor orgFG = Console.ForegroundColor;
+    public void ColorSet()
+    {
+        Console.BackgroundColor = ConsoleColor.DarkBlue;
+        Console.ForegroundColor = ConsoleColor.White;
+    }
+
+    public void ColorHighlight()
+    {
+        Console.BackgroundColor = ConsoleColor.DarkCyan;
+        Console.ForegroundColor = ConsoleColor.White;
+    }
+
+    public void ColorUnset()
+    {
+        Console.BackgroundColor = orgBG;
+        Console.ForegroundColor = orgFG;
+    }
+}
+
 public class Actor
 {
     public string Name;
