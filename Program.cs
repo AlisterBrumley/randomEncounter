@@ -58,7 +58,14 @@ InitGameScreen();
 do
 {
     PromptSet();
-    PlayerChoice();
+    string playerAction = PlayerChoice();
+    if (playerAction == turnPrompt[2])
+    {
+        Console.Clear();
+        Console.CursorVisible = true;
+        Environment.Exit(0);
+    }
+
 } while (!winConditon);
 
 
@@ -72,7 +79,7 @@ int Roll()
     return rand.Next(MinDice, MaxDice);
 }
 
-void PlayerChoice()
+string PlayerChoice()
 {
     bool selected = false;
     int promptIdx = 0;
@@ -101,22 +108,21 @@ void PlayerChoice()
                 break;
         }
     } while (!selected);
-    // TODO - REVERT COLOR TO STANDARDS?
-    Console.SetCursorPosition(debugPos.x, debugPos.y);
-    Console.Write(turnPrompt[promptIdx]);
+    // DebugWrite(turnPrompt[promptIdx]);
+    return turnPrompt[promptIdx];
 }
 
 void InitGameScreen()
 {
+    string bottomBox = fullWidth + "\n" + fullWidth + "\n" + fullWidth;
+    int introX = termHalfWidth - gameStartHalfLen;
     Console.Clear();
     // Drawing bottom box
-    Console.SetCursorPosition(TermMin, boxY);
     box.ColorSet();
-    Console.Write(fullWidth + "\n" + fullWidth + "\n" + fullWidth);
+    MoveCursorWrite(TermMin, boxY, bottomBox);
 
     // A random encounter!
-    Console.SetCursorPosition(termHalfWidth - gameStartHalfLen, messageY);
-    Console.Write(gameStart);
+    MoveCursorWrite(introX, messageY, gameStart);
     Thread.Sleep(1000);
 
     box.ColorUnset();
@@ -143,20 +149,30 @@ void PromptHighlight(ref int idx)
     {
         idx = promptArrLength;
     }
-    Console.SetCursorPosition(promptPos[idx].x, messageY);
     box.ColorHighlight();
-    Console.Write(turnPrompt[idx]);
+    MoveCursorWrite(promptPos[idx].x, messageY, turnPrompt[idx]);
     box.ColorUnset();
 }
 
 void PromptUnHighlight(int idx)
 {
-    Console.SetCursorPosition(promptPos[idx].x, messageY);
     box.ColorSet();
-    Console.Write(turnPrompt[idx]);
+    MoveCursorWrite(promptPos[idx].x, messageY, turnPrompt[idx]);
     box.ColorUnset();
 }
 
+// maybe class these?
+void MoveCursorWrite(int xPos, int yPos, string message)
+{
+    Console.SetCursorPosition(xPos, yPos);
+    Console.Write(message);
+}
+
+void DebugWrite(string message)
+{
+    Console.SetCursorPosition(debugPos.x, debugPos.y);
+    Console.Write(message);
+}
 
 Actor CreatePlayer()
 {
@@ -215,7 +231,6 @@ Actor[] TurnSort(Actor[] enemies, Actor player)
 
 public class Box
 {
-
     ConsoleColor orgBG = Console.BackgroundColor;
     ConsoleColor orgFG = Console.ForegroundColor;
     public void ColorSet()
