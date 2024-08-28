@@ -36,6 +36,7 @@ int gameStartHalfLen = gameStart.Length / 2;
 int messageY = termHeight - 1;
 int promptSpacing = 10;
 string[] turnPrompt = { "Melee".PadRight(promptSpacing), "Ranged".PadRight(promptSpacing), "Escape".PadRight(promptSpacing) };
+(string melee, string range, string escape) playerActions = (turnPrompt[0], turnPrompt[1], turnPrompt[2]);
 int promptArrLength = turnPrompt.Length - 1;
 int promptHalfLength = string.Join("", turnPrompt).Length / 2;
 int promptStartX = termHalfWidth - promptHalfLength;
@@ -58,13 +59,12 @@ InitGameScreen();
 do
 {
     PromptSet();
-    string playerAction = PlayerChoice();
-    if (playerAction == turnPrompt[2])
+    string selectedAction = PlayerChoice();
+    if (selectedAction == playerActions.escape)
     {
-        Console.Clear();
-        Console.CursorVisible = true;
-        Environment.Exit(0);
+        SafeExit();
     }
+
 
 } while (!winConditon);
 
@@ -99,16 +99,14 @@ string PlayerChoice()
                 PromptHighlight(ref promptIdx);
                 break;
             case ConsoleKey.Escape:
-                Console.Clear();
-                Console.CursorVisible = true;
-                Environment.Exit(0);
+                // prompt user to see if they definitely want to exit
+                SafeExit();
                 break;
             case ConsoleKey.Enter:
                 selected = true;
                 break;
         }
     } while (!selected);
-    // DebugWrite(turnPrompt[promptIdx]);
     return turnPrompt[promptIdx];
 }
 
@@ -172,6 +170,20 @@ void DebugWrite(string message)
 {
     Console.SetCursorPosition(debugPos.x, debugPos.y);
     Console.Write(message);
+}
+
+void SafeExit()
+{
+    Console.Clear();
+    Console.CursorVisible = true;
+    Environment.Exit(0);
+}
+
+void ErrorExit()
+{
+    Console.Clear();
+    Console.CursorVisible = true;
+    Environment.Exit(1);
 }
 
 Actor CreatePlayer()
@@ -260,6 +272,8 @@ public class Actor
     public int MeleeAtk; // melee attack base damage
     public int RangedAtk; // range attack base damage
     public int Speed; // evasion base stat
+
+    public string actionState = "pass";
 
     public Actor(string name, int hp, int def, int melee, int ranged, int speed)
     {
