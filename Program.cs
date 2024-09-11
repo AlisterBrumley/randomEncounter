@@ -26,8 +26,8 @@ int termWidth = Console.WindowWidth;
 int termHalfHeight = Console.WindowHeight / 2;
 int termHalfWidth = Console.WindowWidth / 2;
 int boxY = termHeight - 2;
-(int x, int y) debugPos = (TermMin, TermMin);
-string fullWidth = "".PadRight(termWidth);
+(int x, int y) debugPos = (TermMin, TermMin); // top left positon for debug/game messages
+string clearLine = "".PadRight(termWidth);
 Box box = new Box();
 
 // PROMPT/INFO SETTINGS
@@ -100,7 +100,7 @@ string PlayerChoice()
                 break;
             case ConsoleKey.Escape:
                 // prompt user to see if they definitely want to exit
-                SafeExit();
+                PromptExit();
                 break;
             case ConsoleKey.Enter:
                 selected = true;
@@ -112,7 +112,7 @@ string PlayerChoice()
 
 void InitGameScreen()
 {
-    string bottomBox = fullWidth + "\n" + fullWidth + "\n" + fullWidth;
+    string bottomBox = clearLine + "\n" + clearLine + "\n" + clearLine;
     int introX = termHalfWidth - gameStartHalfLen;
     Console.Clear();
     // Drawing bottom box
@@ -159,6 +159,18 @@ void PromptUnHighlight(int idx)
     box.ColorUnset();
 }
 
+void PromptExit()
+{
+    DebugWrite("Are you sure you want to quit? [y/N]: ");
+    string? conf = Console.ReadLine();
+    conf?.ToLower();
+    if (conf == "y" || conf == "yes" || conf == "yeah" || conf == "yep") // we could go on forever here...
+    {
+        SafeExit();
+    }
+    else DebugWrite(clearLine);
+}
+
 // maybe class these?
 void MoveCursorWrite(int xPos, int yPos, string message)
 {
@@ -179,12 +191,13 @@ void SafeExit()
     Environment.Exit(0);
 }
 
-void ErrorExit()
-{
-    Console.Clear();
-    Console.CursorVisible = true;
-    Environment.Exit(1);
-}
+// if we need it, this is a fast way to error and quit
+// void ErrorExit()
+// {
+//     Console.Clear();
+//     Console.CursorVisible = true;
+//     Environment.Exit(1);
+// }
 
 Actor CreatePlayer()
 {

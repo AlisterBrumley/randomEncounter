@@ -2,5 +2,5 @@ bin
 obj
 desktop.ini
 .DS_Store
-# *.sln
+*.sln
 randomEncounter.generated.sln
