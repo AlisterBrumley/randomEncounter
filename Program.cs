@@ -62,7 +62,7 @@ do
     string selectedAction = PlayerChoice();
     if (selectedAction == playerActions.escape)
     {
-        SafeExit();
+        RunCheck();
     }
 
 
@@ -147,6 +147,7 @@ void PromptHighlight(ref int idx)
     //     idx = promptArrLength;
     // }
     // ternary operator below does the above if, but in one line
+    // checks if idx positon overrides and resets it back
     idx = (idx > promptArrLength) ? 0 : (idx < 0 ? promptArrLength : idx);
 
     box.ColorHighlight();
@@ -165,12 +166,29 @@ void PromptExit()
 {
     DebugWrite("Are you sure you want to quit? [y/N]: ");
     string? conf = Console.ReadLine();
-    conf?.ToLower();
+    conf?.ToLower().Trim();
     if (conf == "y" || conf == "yes" || conf == "yeah" || conf == "yep") // we could go on forever here...
     {
         SafeExit();
     }
     else DebugWrite(clearLine);
+}
+
+void RunCheck()
+{
+    int roll = Roll();
+    if (roll < 10)
+    {
+        DebugWrite("you ran away like a coward!");
+        Thread.Sleep(1500);
+        SafeExit();
+    }
+    else
+    {
+        DebugWrite("you tripped like a goof and couldnt escape!");
+        Thread.Sleep(1000);
+        DebugWrite(clearLine);
+    }
 }
 
 // maybe class these?
