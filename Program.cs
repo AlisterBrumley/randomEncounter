@@ -35,7 +35,7 @@ string gameStart = "A Random Encounter!";
 int gameStartHalfLen = gameStart.Length / 2;
 int messageY = termHeight - 1;
 int promptSpacing = 10;
-string[] turnPrompt = { "Melee".PadRight(promptSpacing), "Ranged".PadRight(promptSpacing), "Escape".PadRight(promptSpacing) };
+string[] turnPrompt = { "Melee".PadRight(promptSpacing), "Ranged".PadRight(promptSpacing), "Run".PadRight(promptSpacing) };
 (string melee, string range, string escape) playerActions = (turnPrompt[0], turnPrompt[1], turnPrompt[2]);
 int promptArrLength = turnPrompt.Length - 1;
 int promptHalfLength = string.Join("", turnPrompt).Length / 2;
@@ -99,7 +99,6 @@ string PlayerChoice()
                 PromptHighlight(ref promptIdx);
                 break;
             case ConsoleKey.Escape:
-                // prompt user to see if they definitely want to exit
                 PromptExit();
                 break;
             case ConsoleKey.Enter:
@@ -139,14 +138,17 @@ void PromptSet()
 
 void PromptHighlight(ref int idx)
 {
-    if (idx > promptArrLength)
-    {
-        idx = 0;
-    }
-    else if (idx < 0)
-    {
-        idx = promptArrLength;
-    }
+    // if (idx > promptArrLength)
+    // {
+    //     idx = 0;
+    // }
+    // else if (idx < 0)
+    // {
+    //     idx = promptArrLength;
+    // }
+    // ternary operator below does the above if, but in one line
+    idx = (idx > promptArrLength) ? 0 : (idx < 0 ? promptArrLength : idx);
+
     box.ColorHighlight();
     MoveCursorWrite(promptPos[idx].x, messageY, turnPrompt[idx]);
     box.ColorUnset();
