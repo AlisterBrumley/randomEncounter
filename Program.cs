@@ -25,9 +25,8 @@ int termHeight = Console.WindowHeight - 1;
 int termWidth = Console.WindowWidth;
 int termHalfHeight = Console.WindowHeight / 2;
 int termHalfWidth = Console.WindowWidth / 2;
-(int x, int y) messageBoxPos = (TermMin, termHeight - 3);
 (int x, int y) prompBoxPos = (TermMin, termHeight - 2);
-(int x, int y) debugPos = (TermMin, TermMin); // top left positon for debug/game messages
+(int x, int y) messageBoxPos = (TermMin, termHeight - 3); // box above bottom box for game messages
 string clearLine = "".PadRight(termWidth);
 Box box = new Box();
 
@@ -44,7 +43,7 @@ int promptStartX = termHalfWidth - promptHalfLength;
 (int x, int y)[] promptPos = { (promptStartX, messageY), (promptStartX + promptSpacing, messageY), (promptStartX + promptSpacing * 2, messageY) };
 
 
-
+Writer writer = new Writer(TermMin, termHeight, termWidth);
 
 /*
     MAIN    MAIN    MAIN    MAIN    MAIN    MAIN    MAIN    MAIN    MAIN    MAIN    MAIN    MAIN    MAIN    MAIN    MAIN
@@ -65,7 +64,6 @@ do
     {
         RunCheck();
     }
-
 
 } while (!winConditon);
 
@@ -118,10 +116,10 @@ void InitGameScreen()
     // Drawing bottom box
     box.ColorSet();
     // box.Draw(prompBoxPos);
-    MoveCursorWrite(prompBoxPos.x, prompBoxPos.y, bottomBox);
+    writer.MoveCursorWrite(prompBoxPos, bottomBox); // MAKE NEW FUNCTION TO WRITE PROMPTS HERE
 
     // A random encounter!
-    MoveCursorWrite(introX, messageY, gameStart);
+    writer.MoveCursorWrite(introX, messageY, gameStart);
     Thread.Sleep(1000);
 
     box.ColorUnset();
@@ -153,27 +151,27 @@ void PromptHighlight(ref int idx)
     idx = (idx > promptArrLength) ? 0 : (idx < 0 ? promptArrLength : idx);
 
     box.ColorHighlight();
-    MoveCursorWrite(promptPos[idx].x, messageY, turnPrompt[idx]);
+    writer.MoveCursorWrite(promptPos[idx].x, messageY, turnPrompt[idx]);
     box.ColorUnset();
 }
 
 void PromptUnHighlight(int idx)
 {
     box.ColorSet();
-    MoveCursorWrite(promptPos[idx].x, messageY, turnPrompt[idx]);
+    writer.MoveCursorWrite(promptPos[idx].x, messageY, turnPrompt[idx]);
     box.ColorUnset();
 }
 
 void PromptExit()
 {
-    DebugWrite("Are you sure you want to quit? [y/N]: ");
+    writer.DebugWrite("Are you sure you want to quit? [y/N]: ");
     string? conf = Console.ReadLine();
     conf?.ToLower().Trim();
     if (conf == "y" || conf == "yes" || conf == "yeah" || conf == "yep") // we could go on forever here...
     {
         SafeExit();
     }
-    else DebugWrite(clearLine);
+    else writer.DebugWrite(clearLine);
 }
 
 void RunCheck()
@@ -181,29 +179,16 @@ void RunCheck()
     int roll = Roll();
     if (roll < 10)
     {
-        DebugWrite("you ran away like a coward!");
+        writer.DebugWrite("you ran away like a coward!");
         Thread.Sleep(1500);
         SafeExit();
     }
     else
     {
-        DebugWrite("you tripped like a goof and couldnt escape!");
+        writer.DebugWrite("you tripped like a goof and couldnt escape!");
         Thread.Sleep(1000);
-        DebugWrite(clearLine);
+        writer.DebugWrite(clearLine);
     }
-}
-
-// maybe class these?
-void MoveCursorWrite(int xPos, int yPos, string message)
-{
-    Console.SetCursorPosition(xPos, yPos);
-    Console.Write(message);
-}
-
-void DebugWrite(string message)
-{
-    Console.SetCursorPosition(debugPos.x, debugPos.y);
-    Console.Write(message);
 }
 
 void SafeExit()
