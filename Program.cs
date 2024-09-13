@@ -64,7 +64,6 @@ do
     {
         RunCheck();
     }
-
 } while (!winConditon);
 
 
@@ -166,7 +165,7 @@ void PromptExit()
 {
     writer.DebugWrite("Are you sure you want to quit? [y/N]: ");
     string? conf = Console.ReadLine();
-    conf?.ToLower().Trim();
+    conf = conf?.ToLower().Trim();
     if (conf == "y" || conf == "yes" || conf == "yeah" || conf == "yep") // we could go on forever here...
     {
         SafeExit();
