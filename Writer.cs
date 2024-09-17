@@ -16,7 +16,7 @@ public class Writer
         DebugPos = (TermMin, TermMin);
         MessagePos = (TermMin + 1, TermHeight - 3);
     }
-    public void MoveCursorWrite(int xPos, int yPos, string message) // seperate ints
+    public void MoveCursorWrite(int xPos, int yPos, string message) // seperate ints - I should try get rid of these
     {
         Console.SetCursorPosition(xPos, yPos);
         Console.Write(message);
@@ -26,11 +26,6 @@ public class Writer
     {
         Console.SetCursorPosition(pos.x, pos.y);
         Console.Write(message);
-    }
-
-    public void PromptWrite()
-    {
-        // TODO
     }
     
     public void MessageWrite(string message)

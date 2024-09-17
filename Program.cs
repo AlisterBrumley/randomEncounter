@@ -25,10 +25,10 @@ int termHeight = Console.WindowHeight - 1;
 int termWidth = Console.WindowWidth;
 int termHalfHeight = Console.WindowHeight / 2;
 int termHalfWidth = Console.WindowWidth / 2;
-(int x, int y) prompBoxPos = (TermMin, termHeight - 2);
-(int x, int y) messageBoxPos = (TermMin, termHeight - 3); // box above bottom box for game messages
+(int x, int y) prompColorSetPos = (TermMin, termHeight - 2);
+(int x, int y) messageColorSetPos = (TermMin, termHeight - 3); // ColorSet above bottom ColorSet for game messages
 string clearLine = "".PadRight(termWidth);
-Box box = new Box();
+ColorSet ColorSet = new ColorSet();
 
 // PROMPT/INFO SETTINGS
 string gameStart = "A Random Encounter!";
@@ -109,30 +109,30 @@ string PlayerChoice()
 
 void InitGameScreen()
 {
-    string bottomBox = clearLine + "\n" + clearLine + "\n" + clearLine;
+    string bottomColorSet = clearLine + "\n" + clearLine + "\n" + clearLine;
     int introX = termHalfWidth - gameStartHalfLen;
     Console.Clear();
-    // Drawing bottom box
-    box.ColorSet();
-    // box.Draw(prompBoxPos);
-    writer.MoveCursorWrite(prompBoxPos, bottomBox); // MAKE NEW FUNCTION TO WRITE PROMPTS HERE
+    // Drawing bottom ColorSet
+    ColorSet.Prompt();
+    // Box.Draw(prompColorSetPos);
+    writer.MoveCursorWrite(prompColorSetPos, bottomColorSet); // MAKE NEW FUNCTION TO WRITE PROMPTS HERE
 
     // A random encounter!
     writer.MoveCursorWrite(introX, messageY, gameStart);
     Thread.Sleep(1000);
 
-    box.ColorUnset();
+    ColorSet.Default();
 }
 
 void PromptSet()
 {
     Console.SetCursorPosition(promptPos[0].x, promptPos[0].y);
-    box.ColorSet();
+    ColorSet.Prompt();
     foreach (string prompts in turnPrompt)
     {
         Console.Write(prompts);
     }
-    box.ColorUnset();
+    ColorSet.Default();
 }
 
 void PromptHighlight(ref int idx)
@@ -149,16 +149,16 @@ void PromptHighlight(ref int idx)
     // checks if idx positon overrides and resets it back
     idx = (idx > promptArrLength) ? 0 : (idx < 0 ? promptArrLength : idx);
 
-    box.ColorHighlight();
+    ColorSet.Highlight();
     writer.MoveCursorWrite(promptPos[idx].x, messageY, turnPrompt[idx]);
-    box.ColorUnset();
+    ColorSet.Default();
 }
 
 void PromptUnHighlight(int idx)
 {
-    box.ColorSet();
+    ColorSet.Prompt();
     writer.MoveCursorWrite(promptPos[idx].x, messageY, turnPrompt[idx]);
-    box.ColorUnset();
+    ColorSet.Default();
 }
 
 void PromptExit()
@@ -260,105 +260,15 @@ Actor[] TurnSort(Actor[] enemies, Actor player)
         CLASS DEFS
 */
 
+
+
 public class Box
 {
-    ConsoleColor orgBG = Console.BackgroundColor;
-    ConsoleColor orgFG = Console.ForegroundColor;
-    public void ColorSet()
-    {
-        Console.BackgroundColor = ConsoleColor.DarkBlue;
-        Console.ForegroundColor = ConsoleColor.White;
-    }
-
-    public void ColorHighlight()
-    {
-        Console.BackgroundColor = ConsoleColor.DarkCyan;
-        Console.ForegroundColor = ConsoleColor.White;
-    }
-
-    public void ColorUnset()
-    {
-        Console.BackgroundColor = orgBG;
-        Console.ForegroundColor = orgFG;
-    }
-
     // public void Draw((int x, int y)pos)
     // {
     //     // string clearLine = "".PadRight(Console.WindowWidth);
-    //     string bottomBox = clearLine + "\n" + clearLine + "\n" + clearLine;
+    //     string bottomColorSet = clearLine + "\n" + clearLine + "\n" + clearLine;
     //     Console.SetCursorPosition(pos.x, pos.y);
-    //     Console.Write(bottomBox);
+    //     Console.Write(bottomColorSet);
     // }
 }
-
-// public class Actor
-// {
-//     public string Name;
-//     public int Health;
-//     public int Def; // defense multiplier base stat
-//     public int MeleeAtk; // melee attack base damage
-//     public int RangedAtk; // range attack base damage
-//     public int Speed; // evasion base stat
-
-//     public string actionState = "pass";
-
-//     public Actor(string name, int hp, int def, int melee, int ranged, int speed)
-//     {
-
-//         Name = name;
-//         Health = hp;
-//         Def = def;
-//         MeleeAtk = melee;
-//         RangedAtk = ranged;
-//         Speed = speed;
-//     }
-
-//     public void Damaged(int baseDmg, int roll)
-//     {
-//         // Console.WriteLine("Name: " + Name);
-//         // Console.WriteLine("HP: " + Health);
-//         // Console.WriteLine("Roll: " + roll);
-//         int damage = baseDmg + (Def - roll);
-//         // Console.WriteLine("BD: " + baseDmg);
-//         // Console.WriteLine("Damage: " + damage);
-//         int crit = 2 * (Health / 3);
-
-//         if (damage >= crit)
-//         {
-//             Console.WriteLine("critical hit!");
-//             Console.WriteLine($"hit {Name} with {damage} damage!");
-//         }
-//         else
-//         {
-//             Console.WriteLine($"hit {Name} with {damage} damage!");
-//         }
-//         Console.WriteLine();
-//     }
-// }
-
-// public class Player : Actor
-// {
-//     public Player() : base(name: "Player", hp: 150, def: 120, melee: 50, ranged: 50, speed: 30) { }
-//     public Player(string customName) : base(name: customName, hp: 150, def: 120, melee: 50, ranged: 50, speed: 30) { }
-
-//     // add debug/cheat mode
-//     // public Player(string customName) : base(name: customName, hp: 999, def: 120, melee: 50, ranged: 50, speed: 30) { }
-// }
-
-// public class Ogre : Actor
-// {
-//     public Ogre() : base(name: "Ogre", hp: 100, def: 30, melee: 30, ranged: 0, speed: 20) { }
-//     // public Ogre(string customName) : base(name: customName, hp: 100, def: 30, melee: 30, ranged: 0, speed: 20) { }
-//     public Ogre(string customName, int customHp) : base(name: customName, hp: customHp, def: 30, melee: 30, ranged: 0, speed: 35) { }
-// }
-
-// public class Slime : Actor
-// {
-//     public Slime() : base(name: "Slime", hp: 30, def: 10, melee: 10, ranged: 10, speed: 10) { }
-// }
-
-// public class CyberDemon : Actor
-// {
-//     public CyberDemon() : base(name: "CyberDemon", hp: 500, def: 200, melee: 120, ranged: 200, speed: 20) { }
-// }
-
