@@ -4,3 +4,6 @@ desktop.ini
 .DS_Store
 *.sln
 randomEncounter.generated.sln
+notes.txt
+
+Boxes.cs

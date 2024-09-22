@@ -1,27 +1,32 @@
-public class ColorSet
+public class Color
 {
     // taking original term colors
-    (ConsoleColor BG, ConsoleColor FG) defaultColor = (Console.BackgroundColor, Console.ForegroundColor);
+    static (ConsoleColor BG, ConsoleColor FG) defaultColor;
 
-    public void Prompt()
+    public static void GetDefaults()
+    {
+        defaultColor = (Console.BackgroundColor, Console.ForegroundColor);
+    }
+
+    public static void Prompt()
     {
         Console.BackgroundColor = ConsoleColor.DarkBlue;
         Console.ForegroundColor = ConsoleColor.White;
     }
 
-    public void Highlight()
+    public static void Highlight()
     {
         Console.BackgroundColor = ConsoleColor.DarkCyan;
         Console.ForegroundColor = ConsoleColor.White;
     }
 
-    public void Message()
+    public static void Message()
     {
-        Console.BackgroundColor = ConsoleColor.Red;
+        Console.BackgroundColor = ConsoleColor.DarkRed;
         Console.ForegroundColor = ConsoleColor.White;
     }
-    
-    public void Default()
+
+    public static void Default()
     {
         Console.BackgroundColor = defaultColor.BG;
         Console.ForegroundColor = defaultColor.FG;
