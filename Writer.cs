@@ -1,7 +1,6 @@
 using static Globals;
 public class Writer
 {
-    static (int x, int y) DebugPos = (TermMin, TermMin); // top left positon for debug messages
     static (int x, int y) MessagePos = (TermMin, termHeight - 3);  // position above bottom box for game messages
     // static (int x, int y) PromptPos = (TermMin, termHeight - 1):
     public static void MoveCursorWrite(int xPos, int yPos, string message) // seperate ints - I should try get rid of these
@@ -24,18 +23,6 @@ public class Writer
         Color.Default();
     }
 
-    public static void DebugWrite(string message)
-    {
-        Console.SetCursorPosition(DebugPos.x, DebugPos.y);
-        Console.Write(message);
-    }
-
-    public static void DebugWrite(string message, int time)
-    {
-        Console.SetCursorPosition(DebugPos.x, DebugPos.y);
-        Console.Write(message);
-        Thread.Sleep(time);
-    }
 
     public static void PromptWrite(string message)
     {
@@ -86,5 +73,63 @@ public class Writer
         Color.Highlight();
         Writer.MoveCursorWrite(promptPos[idx], turnPrompt[idx]);
         Color.Default();
+    }
+
+    // DEBUGS - TODO - MOVE TO OWN FILE
+
+    static (int x, int y) DebugPos = (TermMin, TermMin); // top left positon for debug messages
+
+    public static void DebugWrite(string message)
+    {
+        Console.SetCursorPosition(DebugPos.x, DebugPos.y);
+        Console.Write(message);
+    }
+
+    public static void DebugWrite(string message, int time)
+    {
+        Console.SetCursorPosition(DebugPos.x, DebugPos.y);
+        Console.Write(message);
+        Thread.Sleep(time);
+        DebugClear();
+    }
+
+    public static void DebugWrite(int messageToConv)
+    {
+        string message = Convert.ToString(messageToConv);
+        Console.SetCursorPosition(DebugPos.x, DebugPos.y);
+        Console.Write(message);
+    }
+
+
+    public static void DebugWrite(int messageToConv, int time)
+    {
+        string message = Convert.ToString(messageToConv);
+        Console.SetCursorPosition(DebugPos.x, DebugPos.y);
+        Console.Write(message);
+        Thread.Sleep(time);
+        DebugClear();
+    }
+
+    public static void DebugWrite(bool messageToConv)
+    {
+        string message = Convert.ToString(messageToConv);
+        Console.SetCursorPosition(DebugPos.x, DebugPos.y);
+        Console.Write(message);
+    }
+
+
+    public static void DebugWrite(bool messageToConv, int time)
+    {
+        string message = Convert.ToString(messageToConv);
+        Console.SetCursorPosition(DebugPos.x, DebugPos.y);
+        Console.Write(message);
+        Thread.Sleep(time);
+        DebugClear();
+    }
+
+    public static void DebugClear()
+    {
+        Console.SetCursorPosition(DebugPos.x, DebugPos.y);
+        Console.Write(clearLine);
     }
 }
