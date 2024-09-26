@@ -34,26 +34,67 @@ public class Actor
         Graphic = graphic;
     }
 
-    public void Damaged(int baseDmg, int roll)
-    {
-        // Console.WriteLine("Name: " + Name);
-        // Console.WriteLine("HP: " + Health);
-        // Console.WriteLine("Roll: " + roll);
-        int damage = baseDmg + (Def - roll);
-        // Console.WriteLine("BD: " + baseDmg);
-        // Console.WriteLine("Damage: " + damage);
-        int crit = 2 * (Health / 3);
+    // Might be better to make this an attack rather then damage
+    // public void Damaged(int baseDmg, int roll)
+    // {
+    //     int damage = baseDmg + (Def - roll);
+    //     int crit = 2 * (Health / 3);
 
-        if (damage >= crit)
+    //     if (damage >= crit)
+    //     {
+    //         Console.WriteLine("critical hit!");
+    //         Console.WriteLine($"hit {Name} with {damage} damage!");
+    //     }
+    //     else
+    //     {
+    //         Console.WriteLine($"hit {Name} with {damage} damage!");
+    //     }
+    //     Console.WriteLine();
+    // }
+
+    public bool Melee(Actor target)
+    {
+        // rolling for damage
+        int roll = Game.Roll();
+        decimal rollPercent = roll * 5 / 100m;
+        int damage = (int)(MeleeAtk * rollPercent);
+
+        // rolling for defense
+        int defRoll = Game.Roll();
+
+        // rolling for evasion
+        int dodgeRoll = Game.Roll();
+        int dodgeSpeed = (int) (target.Speed * (dodgeRoll * 5 / 100m));
+        int hitRoll = Game.Roll();
+        int hitSpeed = (int) (this.Speed * (hitRoll * 5 / 100m));
+        if (dodgeSpeed > hitSpeed)
         {
-            Console.WriteLine("critical hit!");
-            Console.WriteLine($"hit {Name} with {damage} damage!");
+            Writer.MessageWrite(this.Name + " missed!");
+            return false;
         }
-        else
-        {
-            Console.WriteLine($"hit {Name} with {damage} damage!");
-        }
-        Console.WriteLine();
+
+        // TODO - FIGURE THIS OUT?
+        // int damage = MeleeAtk + (target.Def - roll);
+        // int crit = 2 * (Health / 3);
+
+        // int crit = target.Def % roll;
+        // if (crit > 10)
+        // {
+        //     target.Health = target.Health - damage;
+        //     // Console.WriteLine("critical hit!");
+        //     // Console.WriteLine($"hit {Name} with {damage} damage!");
+        // }
+        // else
+        // {
+        //     // Console.WriteLine($"hit {Name} with {damage} damage!");
+        // }
+
+        return true;
+    }
+
+    public void Ranged(Actor target, int roll)
+    {
+
     }
 }
 
