@@ -1,10 +1,8 @@
 using static Globals;
 public class Game
 {
-    static string clearLine = "".PadRight(termWidth);
-
     // Basically a D20
-    static int Roll()
+    public static int Roll()
     {
         var rand = new Random();
         return rand.Next(MinDice, MaxDice);
