@@ -10,6 +10,8 @@ public static class Globals
     public static int termHalfWidth = Console.WindowWidth / 2;
     public static int promptSpacing = 10;
 
+    public static string clearLine = "".PadRight(termWidth);
+
     public static (string melee, string range, string escape) playerActions = ("Melee", "Ranged", "Run");
     public static string[] turnPrompt = { playerActions.melee.PadRight(promptSpacing), playerActions.range.PadRight(promptSpacing), playerActions.escape.PadRight(promptSpacing) };
     public static int promptStartX = termHalfWidth - (string.Join("", turnPrompt).Length / 2);
