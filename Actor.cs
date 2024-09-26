@@ -55,23 +55,33 @@ public class Actor
     public bool Melee(Actor target)
     {
         // rolling for damage
-        int roll = Game.Roll();
-        decimal rollPercent = roll * 5 / 100m;
-        int damage = (int)(MeleeAtk * rollPercent);
+        int dmgRoll = Game.Roll();
+        int damage = (int)(MeleeAtk * (dmgRoll * 5 / 100m));
+        // Writer.DebugWrite("ATK:" + damage, 2000);
 
         // rolling for defense
         int defRoll = Game.Roll();
+        int defense = (int)(target.Def * (defRoll * 5 / 100m));
+        // Writer.DebugWrite("DEF:" + defense, 2000);
+
+        // Writer.DebugWrite(target.Name + " HP:" + target.Health + " DMG:" + damage + " DEF:" + defense);
 
         // rolling for evasion
+        //      // MISSES TOO MUCH?
         int dodgeRoll = Game.Roll();
-        int dodgeSpeed = (int) (target.Speed * (dodgeRoll * 5 / 100m));
+        int dodgeSpeed = (int)(target.Speed * (dodgeRoll * 5 / 100m));
         int hitRoll = Game.Roll();
-        int hitSpeed = (int) (this.Speed * (hitRoll * 5 / 100m));
+        int hitSpeed = (int)(this.Speed * (hitRoll * 5 / 100m));
         if (dodgeSpeed > hitSpeed)
         {
             Writer.MessageWrite(this.Name + " missed!");
             return false;
         }
+
+        // taking care of overrun
+        damage = defense >= damage ? 1 : damage;
+        target.Health -= damage;
+        Writer.DebugWrite(target.Health);
 
         // TODO - FIGURE THIS OUT?
         // int damage = MeleeAtk + (target.Def - roll);
