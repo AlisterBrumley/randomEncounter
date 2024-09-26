@@ -82,13 +82,13 @@ public class Writer
     public static void DebugWrite(string message)
     {
         Console.SetCursorPosition(DebugPos.x, DebugPos.y);
-        Console.Write(message);
+        Console.Write(message.PadRight(termWidth));
     }
 
     public static void DebugWrite(string message, int time)
     {
         Console.SetCursorPosition(DebugPos.x, DebugPos.y);
-        Console.Write(message);
+        Console.Write(message.PadRight(termWidth));
         Thread.Sleep(time);
         DebugClear();
     }
@@ -97,7 +97,7 @@ public class Writer
     {
         string message = Convert.ToString(messageToConv);
         Console.SetCursorPosition(DebugPos.x, DebugPos.y);
-        Console.Write(message);
+        Console.Write(message.PadRight(termWidth));
     }
 
 
@@ -105,7 +105,7 @@ public class Writer
     {
         string message = Convert.ToString(messageToConv);
         Console.SetCursorPosition(DebugPos.x, DebugPos.y);
-        Console.Write(message);
+        Console.Write(message.PadRight(termWidth));
         Thread.Sleep(time);
         DebugClear();
     }
@@ -114,7 +114,7 @@ public class Writer
     {
         string message = Convert.ToString(messageToConv);
         Console.SetCursorPosition(DebugPos.x, DebugPos.y);
-        Console.Write(message);
+        Console.Write(message.PadRight(termWidth));
     }
 
 
@@ -122,7 +122,7 @@ public class Writer
     {
         string message = Convert.ToString(messageToConv);
         Console.SetCursorPosition(DebugPos.x, DebugPos.y);
-        Console.Write(message);
+        Console.Write(message.PadRight(termWidth));
         Thread.Sleep(time);
         DebugClear();
     }
