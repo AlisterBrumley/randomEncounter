@@ -27,19 +27,9 @@ public class Game
         Color.Default();
     }
 
-    public static void PromptSet()
+    public static void PromptReset()
     {
-        Console.SetCursorPosition(promptPos[0].x, promptPos[0].y);
-        Color.Prompt();
-        foreach (string prompts in turnPrompt)
-        {
-            Console.Write(prompts);
-        }
-        Color.Default();
-
-        // TODO check if this works
-        // Writer.PromptWrite(turnPrompt);
-
+        Writer.PromptWrite(turnPrompt);
     }
 
     public static void ExitCheck()
