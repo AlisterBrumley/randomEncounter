@@ -1,3 +1,4 @@
+using static Globals;
 
 public class Actor
 {
@@ -93,6 +94,15 @@ public class Actor
 
         return true;
     }
+
+    // TODO
+    // public class Actions;
+    // {
+    // }
+    // ORD
+    // enum Actions
+    // {
+    // }
 }
 
 public class Player : Actor
@@ -102,7 +112,72 @@ public class Player : Actor
 
     // add debug/cheat mode
     // public Player(string customName) : base(name: customName, hp: 999, def: 120, melee: 50, ranged: 50, speed: 30) { }
+
+    public static string ActionChoice()
+    {
+        bool selected = false;
+        int promptIdx = 0;
+        Writer.PromptHighlight(promptIdx);
+        do
+        {
+            switch (Console.ReadKey(true).Key)
+            {
+                case ConsoleKey.LeftArrow:
+                    Writer.PromptLeft(ref promptIdx);
+                    break;
+                case ConsoleKey.RightArrow:
+                    Writer.PromptRight(ref promptIdx);
+                    break;
+                case ConsoleKey.Escape:
+                    Game.ExitCheck();
+                    break;
+                case ConsoleKey.Enter:
+                    selected = true;
+                    break;
+            }
+        } while (!selected);
+        Writer.PromptUnHighlight(promptIdx);
+        return turnPrompt[promptIdx].Trim();
+    }
+
+    public static Actor TargetChoice(Actor[] enemies)
+    {
+        int enemiesArrLength = enemies.Length - 1;
+        bool selected = false;
+        int enemyIdx = 0;
+        do
+        {
+            Writer.MessageWrite("Select Target: " + enemies[enemyIdx].Name);
+            switch (Console.ReadKey(true).Key)
+            {
+                case ConsoleKey.LeftArrow:
+                    enemyIdx = --enemyIdx < 0 ? enemiesArrLength : enemyIdx;
+                    break;
+                case ConsoleKey.RightArrow:
+                    enemyIdx = ++enemyIdx > enemiesArrLength ? 0 : enemyIdx;
+                    break;
+                case ConsoleKey.Escape:
+                    Game.ExitCheck();
+                    break;
+                case ConsoleKey.Enter:
+                    selected = true;
+                    break;
+            }
+        } while (!selected);
+
+        return enemies[enemyIdx];
+    }
 }
+
+// TODO
+// public class Enemy : Actor
+// {
+//     public static Actor ActionChoice()
+//     {
+//         this.actionState == playerActions.melee;
+//     }
+// }
+
 
 public class Ogre : Actor
 {

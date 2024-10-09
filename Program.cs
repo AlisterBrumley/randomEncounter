@@ -29,7 +29,7 @@ Game.Init();
 do
 {
     Game.PromptReset();
-    player.actionState = Game.PlayerActionChoice();
+    player.actionState = Player.ActionChoice();
     if (player.actionState == playerActions.escape)
     {
         Game.RunCheck();
@@ -45,7 +45,7 @@ do
     // DISPLAY ON PROMPTBOX - WILL HAVE TO RETHINK GLOBAL.PROMPTPOS TO LOCAL LIST ONE
     // GO TO FIRST ENEMY AND HIGHLIGHT
     // player.target == Game.TargetChoice();
-    player.Target = Game.PlayerTargetChoice(enemies);
+    player.Target = Player.TargetChoice(enemies);
     // Writer.DebugWrite(Convert.ToString(player.Target));
 
 
