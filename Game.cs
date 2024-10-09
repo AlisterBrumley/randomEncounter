@@ -7,6 +7,7 @@ public class Game
         var rand = new Random();
         return rand.Next(MinDice, MaxDice);
     }
+
     public static void Init()
     {
         string bottomBox = clearLine + "\n" + clearLine + "\n" + clearLine;
@@ -76,10 +77,9 @@ public class Game
     //     Environment.Exit(1);
     // }
 
-    public static string PlayerChoice()
+    public static string PlayerActionChoice()
     {
         bool selected = false;
-        // bool rightMove;
         int promptIdx = 0;
         Writer.PromptHighlight(promptIdx);
         do
@@ -87,10 +87,10 @@ public class Game
             switch (Console.ReadKey(true).Key)
             {
                 case ConsoleKey.LeftArrow:
-                    Writer.PromptHighlight(ref promptIdx, false);
+                    Writer.PromptLeft(ref promptIdx);
                     break;
                 case ConsoleKey.RightArrow:
-                    Writer.PromptHighlight(ref promptIdx, true);
+                    Writer.PromptRight(ref promptIdx);
                     break;
                 case ConsoleKey.Escape:
                     ExitCheck();
@@ -100,7 +100,36 @@ public class Game
                     break;
             }
         } while (!selected);
+        Writer.PromptUnHighlight(promptIdx);
         return turnPrompt[promptIdx].Trim();
+    }
+
+    public static Actor PlayerTargetChoice(Actor[] enemies)
+    {
+        int enemiesArrLength = enemies.Length - 1;
+        bool selected = false;
+        int enemyIdx = 0;
+        do
+        {
+            Writer.MessageWrite("Select Target: " + enemies[enemyIdx].Name);
+            switch (Console.ReadKey(true).Key)
+            {
+                case ConsoleKey.LeftArrow:
+                    enemyIdx = --enemyIdx < 0 ? enemiesArrLength : enemyIdx;
+                    break;
+                case ConsoleKey.RightArrow:
+                    enemyIdx = ++enemyIdx > enemiesArrLength ? 0 : enemyIdx;
+                    break;
+                case ConsoleKey.Escape:
+                    ExitCheck();
+                    break;
+                case ConsoleKey.Enter:
+                    selected = true;
+                    break;
+            }
+        } while (!selected);
+
+        return enemies[enemyIdx];
     }
 
     public static Actor CreatePlayer(string[] args)

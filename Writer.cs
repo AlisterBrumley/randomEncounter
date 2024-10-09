@@ -49,28 +49,46 @@ public class Writer
 
     }
 
-    public static void PromptHighlight(ref int idx, bool add)
+    public static void PromptLeft(ref int idx)
     {
         int promptArrLength = turnPrompt.Length - 1;
 
         //resets
-        Color.Prompt();
-        Writer.MoveCursorWrite(promptPos[idx], turnPrompt[idx]);
-        Color.Default();
+        PromptUnHighlight(idx);
 
         // moving index
-        idx = add ? ++idx : --idx; // postfix++ / --didnt work
+        // idx--;
         // checks if idx positon overrides and resets it back
-        idx = (idx > promptArrLength) ? 0 : (idx < 0 ? promptArrLength : idx);
+        idx = --idx < 0 ? promptArrLength : idx;
 
-        Color.Highlight();
-        Writer.MoveCursorWrite(promptPos[idx], turnPrompt[idx]);
-        Color.Default();
+        PromptHighlight(idx);
+    }
+
+    public static void PromptRight(ref int idx)
+    {
+        int promptArrLength = turnPrompt.Length - 1;
+
+        //resets
+        PromptUnHighlight(idx);
+
+        // moving index
+        // idx++;
+        // checks if idx positon overrides and resets it back
+        idx = ++idx > promptArrLength ? 0 : idx;
+
+        PromptHighlight(idx);
     }
 
     public static void PromptHighlight(int idx)
     {
         Color.Highlight();
+        Writer.MoveCursorWrite(promptPos[idx], turnPrompt[idx]);
+        Color.Default();
+    }
+
+    public static void PromptUnHighlight(int idx)
+    {
+        Color.Prompt();
         Writer.MoveCursorWrite(promptPos[idx], turnPrompt[idx]);
         Color.Default();
     }

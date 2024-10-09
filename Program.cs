@@ -29,7 +29,7 @@ Game.Init();
 do
 {
     Game.PromptReset();
-    player.actionState = Game.PlayerChoice();
+    player.actionState = Game.PlayerActionChoice();
     if (player.actionState == playerActions.escape)
     {
         Game.RunCheck();
@@ -40,17 +40,20 @@ do
     // }
 
     // TODO - Player Target Choice
-    // CLEAR PROMPT BOX
+    // CLEAR PROMPT BOX?
     // FOREACH ENEMY
     // DISPLAY ON PROMPTBOX - WILL HAVE TO RETHINK GLOBAL.PROMPTPOS TO LOCAL LIST ONE
     // GO TO FIRST ENEMY AND HIGHLIGHT
     // player.target == Game.TargetChoice();
+    player.Target = Game.PlayerTargetChoice(enemies);
+    // Writer.DebugWrite(Convert.ToString(player.Target));
 
 
     // player.Melee(enemies[0]);
     // Actor tActor = new Slime();
     // Actor tActor = new Ogre();
     // tActor.Melee(player);
+    player.Melee(player.Target);
 
 
     // TODO - Enemy roll for actions

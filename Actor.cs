@@ -9,7 +9,7 @@ public class Actor
     public int Speed; // evasion base stat
 
     public string? actionState;
-    public Actor? target;
+    public Actor? Target; // might need to make (idx, name)
     public string Graphic = "       \n       "; // empty space by default
 
     public Actor(string name, int hp, int def, int melee, int ranged, int speed)
