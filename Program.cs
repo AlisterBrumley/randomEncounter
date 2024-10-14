@@ -20,7 +20,7 @@ bool winConditon = false;
 */
 // CREATING ACTORS AND SORTING SPEED
 Actor player = Game.CreatePlayer(args);
-Actor[] enemies = Game.CreateEnemies();
+Actor[] enemies = Game.CreateEnemies(player); // feeding player through as target
 Actor[] turnOrder = Game.TurnSort(enemies, player);
 
 Game.Init();
