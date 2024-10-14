@@ -118,7 +118,7 @@ public class Game
         }
     }
 
-    public static Actor[] CreateEnemies()
+    public static Actor[] CreateEnemies(Actor player)
     {
         Actor[] enemies = new Actor[MaxEnemies];
 
@@ -128,19 +128,25 @@ public class Game
             switch (roll)
             {
                 case 20:
-                    enemies[i] = new CyberDemon();
+                    enemies[i] = new CyberDemon(player);
                     break;
-                case > 15:
-                    enemies[i] = new Ogre(customName: "Shrek", customHp: 200);
+                case > 17:
+                    enemies[i] = new Ogre(customName: "Shrek", customHp: 200, player);
                     break;
-                case > 10:
-                    enemies[i] = new Ogre();
+                case > 12:
+                    enemies[i] = new Ogre(player);
+                    break;
+                case > 7:
+                    enemies[i] = new Slime(player);
+                    break;
+                case > 2:
+                    enemies[i] = new Bug(player);
                     break;
                 case > 0:
-                    enemies[i] = new Slime();
+                    enemies[i] = new Bunny(player);
                     break;
                 default:
-                    enemies[i] = new Slime();
+                    enemies[i] = new Slime(player);
                     break;
             }
         }
