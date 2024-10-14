@@ -23,7 +23,7 @@ public class Actor
         RangedAtk = ranged;
         Speed = speed;
     }
-    public Actor(string name, int hp, int def, int melee, int ranged, int speed, string graphic)
+    public Actor(string name, int hp, int def, int melee, int ranged, int speed, string graphic, Actor target)
     {
 
         Name = name;
@@ -33,6 +33,7 @@ public class Actor
         RangedAtk = ranged;
         Speed = speed;
         Graphic = graphic;
+        Target = target;
     }
 
     public bool Melee(Actor target)
@@ -95,14 +96,11 @@ public class Actor
         return true;
     }
 
-    // TODO
-    // public class Actions;
-    // {
-    // }
-    // ORD
-    // enum Actions
-    // {
-    // }
+    // For enemies; player gets new method
+    public void ActionChoice()
+    {
+        actionState = enemyActions.Melee; // FOR TESTING
+    }
 }
 
 public class Player : Actor
@@ -113,7 +111,7 @@ public class Player : Actor
     // add debug/cheat mode
     // public Player(string customName) : base(name: customName, hp: 999, def: 120, melee: 50, ranged: 50, speed: 30) { }
 
-    public static string ActionChoice()
+    public new static string ActionChoice()
     {
         bool selected = false;
         int promptIdx = 0;
@@ -169,38 +167,28 @@ public class Player : Actor
     }
 }
 
-// TODO
-// public class Enemy : Actor
-// {
-//     public static Actor ActionChoice()
-//     {
-//         this.actionState == playerActions.melee;
-//     }
-// }
-
-
 public class Ogre : Actor
 {
-    public Ogre() : base(name: "Ogre", hp: 100, def: 30, melee: 25, ranged: 0, speed: 20, graphic: ",|,,,|,\n(o _ o)") { }
-    public Ogre(string customName, int customHp) : base(name: customName, hp: customHp, def: 30, melee: 30, ranged: 0, speed: 35, graphic: "O>   <O\n(T _ T)") { }
+    public Ogre(Actor player) : base(name: "Ogre", hp: 100, def: 30, melee: 25, ranged: 0, speed: 20, graphic: ",|,,,|,\n(o _ o)", target: player) { }
+    public Ogre(string customName, int customHp, Actor player) : base(name: customName, hp: customHp, def: 30, melee: 30, ranged: 0, speed: 35, graphic: "O>   <O\n(T _ T)", target: player) { }
 }
 
 public class Slime : Actor
 {
-    public Slime() : base(name: "Slime", hp: 30, def: 10, melee: 15, ranged: 10, speed: 25, graphic: "       \n(o - O)") { }
+    public Slime(Actor player) : base(name: "Slime", hp: 30, def: 10, melee: 15, ranged: 10, speed: 25, graphic: "       \n(o - O)", target: player) { }
 }
 
 public class CyberDemon : Actor
 {
-    public CyberDemon() : base(name: "CyberDemon", hp: 500, def: 200, melee: 120, ranged: 200, speed: 10, graphic: " }{ }{ \n(Ø>_<Ø)") { }
+    public CyberDemon(Actor player) : base(name: "CyberDemon", hp: 500, def: 200, melee: 120, ranged: 200, speed: 10, graphic: " }{ }{ \n(Ø>_<Ø)", target: player) { }
 }
 
 public class Bug : Actor
 {
-    public Bug() : base(name: "Bug", hp: 15, def: 5, melee: 10, ranged: 10, speed: 35, graphic: "°\\, ,/°\n(# m #)") { }
+    public Bug(Actor player) : base(name: "Bug", hp: 15, def: 5, melee: 10, ranged: 10, speed: 35, graphic: "°\\, ,/°\n(# m #)", target: player) { }
 }
 
 public class Bunny : Actor
 {
-    public Bunny() : base(name: "Bunny", hp: 5, def: 0, melee: 1, ranged: 0, speed: 100, graphic: " /\\ /\\ \n(o x o)") { }
+    public Bunny(Actor player) : base(name: "Bunny", hp: 5, def: 0, melee: 1, ranged: 0, speed: 100, graphic: " /\\ /\\ \n(o x o)", target: player) { }
 }
