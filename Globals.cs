@@ -13,6 +13,7 @@ public static class Globals
     public static string clearLine = "".PadRight(termWidth);
 
     public static (string melee, string range, string escape) playerActions = ("Melee", "Ranged", "Run");
+    public static (string Melee, string Range, string Pass) enemyActions = ("Melee", "Ranged", "Pass");
     public static string[] turnPrompt = { playerActions.melee.PadRight(promptSpacing), playerActions.range.PadRight(promptSpacing), playerActions.escape.PadRight(promptSpacing) };
     public static int promptStartX = termHalfWidth - (string.Join("", turnPrompt).Length / 2);
     public static (int x, int y)[] promptPos = { (promptStartX, termHeight - 1), (promptStartX + promptSpacing, termHeight - 1), (promptStartX + promptSpacing * 2, termHeight - 1) };
